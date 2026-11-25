@@ -46,14 +46,14 @@
       {{ pantalla }}
     </div>
 
-    <!-- Botones de memoria. Son visuales por ahora; no tienen lógica todavía. -->
+    <!-- Botones de memoria. MC y MR se deshabilitan mientras la memoria está vacía. -->
     <div class="memoria">
-      <button type="button" disabled>MC</button>
-      <button type="button" disabled>MR</button>
-      <button type="button">M+</button>
-      <button type="button">M−</button>
-      <button type="button">MS</button>
-      <button type="button">M⌄</button>
+      <button type="button" [disabled]="memoria === null" (click)="limpiarMemoria()" aria-label="Borrar memoria">MC</button>
+      <button type="button" [disabled]="memoria === null" (click)="recuperarMemoria()" aria-label="Recuperar memoria">MR</button>
+      <button type="button" (click)="sumarAMemoria()" aria-label="Sumar a la memoria">M+</button>
+      <button type="button" (click)="restarDeMemoria()" aria-label="Restar de la memoria">M−</button>
+      <button type="button" (click)="guardarEnMemoria()" aria-label="Guardar en memoria">MS</button>
+      <button type="button" disabled aria-label="Lista de memoria (no disponible)">M⌄</button>
     </div>
 
     <!--

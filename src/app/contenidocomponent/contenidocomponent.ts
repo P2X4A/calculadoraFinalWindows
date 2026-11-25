@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 /**
  * Componente principal de la calculadora.
@@ -76,6 +76,14 @@ export class Contenidocomponent {
    * no se convertirá en "367".
    */
   mostrandoResultado: boolean = false;
+
+  /**
+   * Valor guardado con MS, M+ o M−.
+   *
+   * Es null mientras la memoria está vacía; así la vista puede
+   * deshabilitar MC y MR.
+   */
+  memoria: number | null = null;
 
   /**
    * Agrega un dígito o un punto decimal a la pantalla.
@@ -374,7 +382,104 @@ export class Contenidocomponent {
       return '';
     }
 
-    return `${this.formatearNumero(this.numero1)} ${this.operador}`;
+    const simbolos: Record<string, string> = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+    const simbolo = simbolos[this.operador] ?? this.operador;
+
+    return `${this.formatearNumero(this.numero1)} ${simbolo}`;
+  }
+
+  /** Borra el valor guardado en memoria (MC). */
+  limpiarMemoria(): void {
+    this.memoria = null;
+  }
+
+  /** Muestra en pantalla el valor guardado en memoria (MR). */
+  recuperarMemoria(): void {
+    if (this.memoria === null) {
+      return;
+    }
+
+    this.pantalla = this.formatearNumero(this.memoria);
+    this.esperandoNumero2 = false;
+    this.mostrandoResultado = true;
+  }
+
+  /** Guarda en memoria el número de la pantalla (MS). */
+  guardarEnMemoria(): void {
+    if (this.pantalla === 'Error') {
+      return;
+    }
+
+    this.memoria = Number(this.pantalla);
+    this.mostrandoResultado = true;
+  }
+
+  /** Suma el número de la pantalla a la memoria (M+). */
+  sumarAMemoria(): void {
+    if (this.pantalla === 'Error') {
+      return;
+    }
+
+    this.memoria = (this.memoria ?? 0) + Number(this.pantalla);
+    this.mostrandoResultado = true;
+  }
+
+  /** Resta el número de la pantalla de la memoria (M−). */
+  restarDeMemoria(): void {
+    if (this.pantalla === 'Error') {
+      return;
+    }
+
+    this.memoria = (this.memoria ?? 0) - Number(this.pantalla);
+    this.mostrandoResultado = true;
+  }
+
+  /**
+   * Permite usar la calculadora con el teclado, como en Windows:
+   * números, punto o coma, + - * /, Enter o = para el resultado,
+   * Backspace para borrar, Escape para C y Supr para CE.
+   */
+  @HostListener('window:keydown', ['$event'])
+  manejarTeclado(evento: KeyboardEvent): void {
+    const tecla = evento.key;
+
+    if (/^[0-9]$/.test(tecla)) {
+      this.agregarNumero(tecla);
+    } else {
+      switch (tecla) {
+        case '.':
+        case ',':
+          this.agregarNumero('.');
+          break;
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+          this.seleccionarOperador(tecla);
+          break;
+        case 'Enter':
+        case '=':
+          this.calcularResultado();
+          break;
+        case 'Backspace':
+          this.borrarUltimo();
+          break;
+        case 'Escape':
+          this.limpiarTodo();
+          break;
+        case 'Delete':
+          this.limpiarEntrada();
+          break;
+        case '%':
+          this.calcularPorcentaje();
+          break;
+        default:
+          return;
+      }
+    }
+
+    // Evita que Enter vuelva a pulsar el botón con foco o que "/" abra la búsqueda del navegador.
+    evento.preventDefault();
   }
 
   /**
