@@ -1,11 +1,128 @@
-.calculadora{
-  width: 350px;
-  /* 350 para definir el ancho inicial de la caja*/
-  ming-height: 500;
-  /* altura minima para pantalla y botones */
-  padding: 20px;
-  /* espacio interior para que los numeros no toquen el borde*/
+/* Calculadora con el aspecto del modo oscuro de la calculadora de Windows 11. */
+.calculadora {
+  /* Ancho fijo como la app de Windows, sin salirse en pantallas pequeñas */
+  width: min(340px, 100%);
+  padding: 16px;
   border-radius: 12px;
-  /* color del fondo que es gris oscuro*/
-  background-color: rgb(32,32,32);
+  background-color: #202020;
+  color: #ffffff;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  font-family: "Segoe UI Variable", "Segoe UI", system-ui, sans-serif;
+}
+
+/* Encabezado: menú, título "Estándar" e historial en una sola fila */
+.encabezado-calculadora {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.titulo-calculadora {
+  flex: 1;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.boton-icono {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.boton-icono:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Operación pendiente (por ejemplo "125 ×"), en gris y alineada a la derecha */
+.operacion-anterior {
+  min-height: 24px;
+  margin-top: 16px;
+  text-align: right;
+  font-size: 14px;
+  color: #a0a0a0;
+}
+
+/* Número principal: grande y alineado a la derecha */
+.pantalla {
+  min-height: 58px;
+  margin-bottom: 8px;
+  text-align: right;
+  font-size: 46px;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* Fila de memoria: botones planos que se reparten el ancho */
+.memoria {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.memoria button {
+  flex: 1;
+  padding: 6px 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.memoria button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.memoria button:disabled {
+  color: #6b6b6b;
+}
+
+/* Teclado: mismos tamaños para todos los botones */
+.botones-calculadora .btn {
+  height: 52px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.botones-calculadora .boton-funcion,
+.botones-calculadora .boton-operador {
+  background-color: #323232;
+}
+
+.botones-calculadora .boton-numero {
+  background-color: #3b3b3b;
+  font-weight: 600;
+}
+
+.botones-calculadora .boton-funcion:hover,
+.botones-calculadora .boton-operador:hover,
+.botones-calculadora .boton-numero:hover {
+  background-color: #444444;
+  color: #ffffff;
+}
+
+/* El igual usa el color de acento de Windows */
+.botones-calculadora .boton-igual {
+  background-color: #4cc2ff;
+  color: #000000;
+}
+
+.botones-calculadora .boton-igual:hover {
+  background-color: #47b1e8;
+  color: #000000;
+}
+
+/* Foco visible para quien usa el teclado */
+.calculadora button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -2px;
+  box-shadow: none;
 }
