@@ -1,0 +1,295 @@
+<!--
+  Contenedor principal.
+  min-vh-100: ocupa al menos el alto completo de la ventana.
+  d-flex: activa Flexbox.
+  justify-content-center: centra horizontalmente.
+  align-items-center: centra verticalmente.
+-->
+<div
+  class="container-fluid min-vh-100 d-flex justify-content-center align-items-center py-4">
+
+  <!-- Caja principal de la calculadora -->
+  <section class="calculadora" aria-label="Calculadora estándar">
+
+    <!-- Encabezado sencillo, inspirado en la calculadora de Windows -->
+    <header class="encabezado-calculadora">
+      <button
+        type="button"
+        class="boton-icono"
+        aria-label="Menú de calculadora">
+        ☰
+      </button>
+
+      <h1 class="titulo-calculadora">Estándar</h1>
+
+      <button
+        type="button"
+        class="boton-icono"
+        aria-label="Historial de operaciones">
+        ◷
+      </button>
+    </header>
+
+    <!--
+      Línea opcional con el primer número y operador.
+      Ejemplo visible mientras se prepara una suma: "34 +"
+    -->
+    <div class="operacion-anterior">
+      {{ operacionActual }}
+    </div>
+
+    <!--
+      Pantalla de la calculadora.
+      Interpolación: muestra el valor de pantalla definido en TypeScript.
+    -->
+    <div class="pantalla" aria-live="polite">
+      {{ pantalla }}
+    </div>
+
+    <!-- Botones de memoria. Son visuales por ahora; no tienen lógica todavía. -->
+    <div class="memoria">
+      <button type="button" disabled>MC</button>
+      <button type="button" disabled>MR</button>
+      <button type="button">M+</button>
+      <button type="button">M−</button>
+      <button type="button">MS</button>
+      <button type="button">M⌄</button>
+    </div>
+
+    <!--
+      Grid de Bootstrap:
+      row: fila.
+      g-1: separación pequeña entre columnas y filas.
+      col-3: cada botón ocupa 3 de 12 columnas = 25%.
+    -->
+    <div class="row g-1 botones-calculadora">
+
+      <!-- Primera fila: controles de limpieza -->
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-funcion w-100"
+          (click)="calcularPorcentaje()">
+          %
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-funcion w-100"
+          (click)="limpiarEntrada()">
+          CE
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-funcion w-100"
+          (click)="limpiarTodo()">
+          C
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-funcion w-100"
+          (click)="borrarUltimo()"
+          aria-label="Borrar último dígito">
+          ⌫
+        </button>
+      </div>
+
+      <!-- Segunda fila: operaciones de un solo número y división -->
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-funcion w-100"
+          (click)="calcularInverso()">
+          1/x
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-funcion w-100"
+          (click)="elevarAlCuadrado()">
+          x²
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-funcion w-100"
+          (click)="calcularRaizCuadrada()">
+          √x
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-operador w-100"
+          [class.operador-activo]="operador === '/'"
+          (click)="seleccionarOperador('/')">
+          ÷
+        </button>
+      </div>
+
+      <!-- Tercera fila: números 7, 8, 9 y multiplicación -->
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('7')">
+          7
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('8')">
+          8
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('9')">
+          9
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-operador w-100"
+          [class.operador-activo]="operador === '*'"
+          (click)="seleccionarOperador('*')">
+          ×
+        </button>
+      </div>
+
+      <!-- Cuarta fila: números 4, 5, 6 y resta -->
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('4')">
+          4
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('5')">
+          5
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('6')">
+          6
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-operador w-100"
+          [class.operador-activo]="operador === '-'"
+          (click)="seleccionarOperador('-')">
+          −
+        </button>
+      </div>
+
+      <!-- Quinta fila: números 1, 2, 3 y suma -->
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('1')">
+          1
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('2')">
+          2
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('3')">
+          3
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-operador w-100"
+          [class.operador-activo]="operador === '+'"
+          (click)="seleccionarOperador('+')">
+          +
+        </button>
+      </div>
+
+      <!-- Sexta fila: signo, cero, decimal e igual -->
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="cambiarSigno()">
+          ±
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('0')">
+          0
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-numero w-100"
+          (click)="agregarNumero('.')">
+          ,
+        </button>
+      </div>
+
+      <div class="col-3">
+        <button
+          type="button"
+          class="btn boton-igual w-100"
+          (click)="calcularResultado()">
+          =
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,11 @@
+.calculadora{
+  width: 350px;
+  /* 350 para definir el ancho inicial de la caja*/
+  ming-height: 500;
+  /* altura minima para pantalla y botones */
+  padding: 20px;
+  /* espacio interior para que los numeros no toquen el borde*/
+  border-radius: 12px;
+  /* color del fondo que es gris oscuro*/
+  background-color: rgb(32,32,32);
+}
